@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+
+            #caja{
+                left: 33%;
+                background-color: aqua;
+                position: relative; /* Imprescindible para que la posición absoluta funcione dentro del cuadro */
+                width: 700px;
+                height: 700px; /* Cambia padding-bottom por una altura definida */
+                border: 2px solid black;
+                overflow: hidden; /* Corta cualquier esquina rota por la rotación */
+                
+            }
+
+            #true{
+                position: absolute;
+                background-color: gray;
+                width: 10px;
+                height: 60px;
+                border-color: black;
+                border-style: solid;
+                box-sizing: border-box;
+            }
+
+            #true:hover{
+                border-color: white;
+                border-style: solid;
+            }
+            
+            #false{
+                position: absolute;
+                background-color: coral;
+                width: 10px;
+                height: 60px;
+                border-color: black;
+                border-style: solid;
+                box-sizing: border-box;
+            }
+
+            #false:hover{
+                border-color: white;
+                border-style: solid;
+            }
+
+    </style>
+
+</head>
+<body>
+
+    <center><h1>UNA AGUJA EN UN PAJAR</h1></center>
+    
+    <div id="caja"></div>
+
+    <center><h2 id = "pajQuit">Paja quitada: 0</h2></center>
+
+    <audio id="musicaFondo" src="./audio/videoplayback.m4a" loop></audio>
+
+    <script>
+
+        const musica = document.getElementById("musicaFondo");
+
+// Al hacer el primer clic en cualquier parte de la página, arranca el audio de fondo
+window.addEventListener("click", function() {
+    if (musica.paused) {
+        musica.volume = 0.4; // Ajusta el volumen aquí (de 0.0 a 1.0)
+        musica.play();
+    }
+}, { once: true });
+
+
+
+        let caja = document.getElementById("caja");
+        let pajQuit = document.getElementById("pajQuit");
+
+        let contador = 0
+
+
+        let numAzar = Math.floor((Math.random() * (5000 - 1)) + 1);
+
+        // Ancho y alto del palo
+        const paloAncho = 10;
+        const paloAlto = 60;
+
+        // Límite máximo donde se puede colocar la esquina superior izquierda
+        const maxLeft = caja.clientWidth - paloAncho;
+        const maxTop = caja.clientHeight - paloAlto;
+
+        for (let i = 1; i <= 5000; i++) {
+
+            let div = document.createElement("div");
+
+            if(i == numAzar){
+                div.setAttribute("id", "true");
+            }
+            else{
+                div.setAttribute("id", "false");
+            }
+
+            // 1. Generar ángulo aleatorio de 0 a 360 grados
+            let angulo = Math.floor(Math.random() * 360);
+
+            // 2. Aplicar la posición usando las variables maxLeft y maxTop de la caja
+            div.style.left = Math.floor(Math.random() * maxLeft) + "px";
+            div.style.top = Math.floor(Math.random() * maxTop) + "px";
+
+            // 3. Aplicar la inclinación
+            div.style.transform = "rotate(" + angulo + "deg)";
+
+            caja.appendChild(div);
+            
+        }
+
+        let paja = document.querySelectorAll("#false")
+        let aguja = document.querySelector("#true")
+
+        for (let i = 0; i < paja.length; i++) {
+            paja[i].addEventListener("click", tocaPaja)  
+        }
+
+        aguja.addEventListener("click", tocaAguja)  
+
+        function tocaPaja(event) {
+
+            let nodoClick
+            
+            if(event){
+                nodoClick = event.target
+                caja.removeChild(nodoClick)
+                contador++
+                pajQuit.textContent = "Paja quitada: " + contador
+            }
+        }
+        
+        function tocaAguja(event) {
+
+            let nodoClick
+
+            if(event){
+                nodoClick = event.target
+                caja.removeChild(nodoClick)
+                alert("¡Aguja encontrada\nHas quitado " + contador + " pajas")
+                caja.replaceChildren();
+            }
+        }
+
+    </script>
+
+</body>
+</html>
