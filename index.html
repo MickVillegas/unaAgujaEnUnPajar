@@ -48,6 +48,47 @@
                 border-style: solid;
             }
 
+
+
+            /* Pantalla oscura de fondo */
+#modalVictoria {
+    display: none; /* Oculta */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+/* Caja de la modal */
+#contenidoModal {
+    background-color: white;
+    padding: 25px 40px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    font-family: sans-serif;
+}
+
+#contenidoModal button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: coral;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#contenidoModal button:hover {
+    background-color: #e05538;
+}
+
     </style>
 
 </head>
@@ -59,20 +100,52 @@
 
     <center><h2 id = "pajQuit">Paja quitada: 0</h2></center>
 
+    <div id="modalVictoria">
+    <div id="contenidoModal">
+        <h2>¡Aguja encontrada! 🎉</h2>
+        <p id="textoContador"></p>
+        <button onclick="cerrarModal()">Jugar de nuevo</button>
+    </div>
+</div>
+
     <audio id="musicaFondo" src="./audio/videoplayback.m4a" loop></audio>
+    <audio id="musicaGanar" src="./audio/reelsvideo.io_1779355459733.mp3" autoplay ></audio>
+    <audio id="sonido" src="" autoplay ></audio>
+
 
     <script>
 
         const musica = document.getElementById("musicaFondo");
 
-// Al hacer el primer clic en cualquier parte de la página, arranca el audio de fondo
-window.addEventListener("click", function() {
-    if (musica.paused) {
-        musica.volume = 0.4; // Ajusta el volumen aquí (de 0.0 a 1.0)
-        musica.play();
-    }
-}, { once: true });
+        // Al hacer el primer clic en cualquier parte de la página, arranca el audio de fondo
+        window.addEventListener("click", function() {
+            if (musica.paused) {
+                musica.volume = 0.4; // Ajusta el volumen aquí (de 0.0 a 1.0)
+                musica.play();
+            }
+        }, { once: true });
 
+        const musicaGanar = document.getElementById("musicaGanar");
+
+        function sonidoGanarReproducir(){
+                if (musicaGanar.paused) {
+                musicaGanar.volume = 1.0; // Ajusta el volumen aquí (de 0.0 a 1.0)
+                musicaGanar.play();
+            }
+        }
+
+        const sonido = document.getElementById("sonido");
+
+        function sonidoAlAzar(){
+
+            let azar = Math.floor((Math.random() * (36 - 1)) + 1);
+
+            sonido.setAttribute("src", `./audio/s${azar}.mp3`)
+            if (sonido.paused) {
+                sonido.volume = 1.0; // Ajusta el volumen aquí (de 0.0 a 1.0)
+                sonido.play();
+            }
+        }
 
 
         let caja = document.getElementById("caja");
@@ -132,6 +205,7 @@ window.addEventListener("click", function() {
             if(event){
                 nodoClick = event.target
                 caja.removeChild(nodoClick)
+                sonidoAlAzar()
                 contador++
                 pajQuit.textContent = "Paja quitada: " + contador
             }
@@ -144,10 +218,18 @@ window.addEventListener("click", function() {
             if(event){
                 nodoClick = event.target
                 caja.removeChild(nodoClick)
-                alert("¡Aguja encontrada\nHas quitado " + contador + " pajas")
+                sonidoGanarReproducir()
+
+                document.getElementById("textoContador").innerText = "Has quitado " + contador + " pajas.";
+                document.getElementById("modalVictoria").style.display = "flex";
+
                 caja.replaceChildren();
             }
         }
+
+    function cerrarModal() {
+        console.log("lol")
+    }
 
     </script>
 
