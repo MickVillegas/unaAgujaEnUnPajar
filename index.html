@@ -7,17 +7,55 @@
 
     <style>
 
-            #caja{
-                left: 33%;
-                background-color: aqua;
-                position: relative; /* Imprescindible para que la posición absoluta funcione dentro del cuadro */
-                width: 700px;
-                height: 700px; /* Cambia padding-bottom por una altura definida */
-                border: 2px solid black;
-                overflow: hidden; /* Corta cualquier esquina rota por la rotación */
-                
-            }
+body {
+        margin: 0;
+        padding: 20px;
+        background-color: #18191c;
+        color: #ffffff;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        box-sizing: border-box;
+    }
 
+    /* Título principal */
+    h1 {
+        margin: 0 0 20px 0;
+        font-size: 2.2rem;
+        letter-spacing: 2px;
+        color: #f39c12;
+        text-shadow: 0 2px 10px rgba(243, 156, 18, 0.3);
+    }
+
+    /* Contador inferior */
+    h2 {
+        margin-top: 20px;
+        font-size: 1.3rem;
+        font-weight: 400;
+        color: #bdc3c7;
+        background: #2c3e50;
+        padding: 8px 20px;
+        border-radius: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+
+    /* Contenedor del juego */
+    #caja {
+        /* Se elimina left: 33% para que Flexbox lo centre exactamente */
+        background-color: #2c221e; /* Fondo tono tierra/madera en vez de aqua */
+        position: relative;
+        width: 600px;
+        height: 600px;
+        border: 4px solid #3e2e28;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+    }
+
+    /* La aguja (metálica con brillo) */
             #true{
                 position: absolute;
                 background-color: gray;
@@ -48,62 +86,89 @@
                 border-style: solid;
             }
 
+    /* Ventana emergente al ganar */
+    #modalVictoria {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(4px); /* Efecto borroso elegante */
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
 
+    #contenidoModal {
+        background-color: #242529;
+        color: #ffffff;
+        padding: 30px 50px;
+        border-radius: 16px;
+        text-align: center;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        border: 1px solid #3a3b40;
+    }
 
-            /* Pantalla oscura de fondo */
-#modalVictoria {
-    display: none; /* Oculta */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
+    #contenidoModal h2 {
+        color: #2ecc71;
+        background: none;
+        box-shadow: none;
+        font-size: 1.8rem;
+        margin: 0 0 10px 0;
+        padding: 0;
+    }
 
-/* Caja de la modal */
-#contenidoModal {
-    background-color: white;
-    padding: 25px 40px;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    font-family: sans-serif;
-}
+    #contenidoModal p {
+        font-size: 1.1rem;
+        color: #a0a5b5;
+        margin-bottom: 20px;
+    }
 
-#contenidoModal button {
-    margin-top: 15px;
-    padding: 10px 20px;
-    background-color: coral;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-}
+    #contenidoModal button {
+        padding: 12px 28px;
+        background-color: #f39c12;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: transform 0.1s, background-color 0.2s;
+    }
 
-#contenidoModal button:hover {
-    background-color: #e05538;
-}
-
+    #contenidoModal button:hover {
+        background-color: #e67e22;
+        transform: scale(1.05);
+    }
+    #cronometro {
+        font-size: 1.2rem;
+        color: #f39c12;
+        background: #2c3e50;
+        padding: 8px 20px;
+        border-radius: 20px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    }
     </style>
 
 </head>
+
 <body>
 
-    <center><h1>UNA AGUJA EN UN PAJAR</h1></center>
-    
-    <div id="caja"></div>
+<h1>UNA AGUJA EN UN PAJAR</h1>
 
-    <center><h2 id = "pajQuit">Paja quitada: 0</h2></center>
+<div id="caja"></div>
 
-    <div id="modalVictoria">
+<h2 id="pajQuit">Paja quitada: 0</h2>
+<div id="cronometro">Tiempo: 00:00:00</div>
+
+<div id="modalVictoria">
     <div id="contenidoModal">
-        <h2>¡Aguja encontrada! 🎉</h2>
+        <h2>¡Aguja encontrada!</h2>
         <p id="textoContador"></p>
+        <p id="textoTiempo"></p>
         <button onclick="cerrarModal()">Jugar de nuevo</button>
     </div>
 </div>
@@ -114,7 +179,41 @@
 
 
     <script>
+        
+        let tiempoSegundos = 0;
+        let intervaloTiempo = null;
 
+        function formatearTiempo(segundosTotales) {
+
+            let horas = Math.floor(segundosTotales / 3600);
+            let minutos = Math.floor((segundosTotales % 3600) / 60);
+            let segundos = segundosTotales % 60;
+
+            let h = horas < 10 ? "0" + horas : horas;
+            let m = minutos < 10 ? "0" + minutos : minutos;
+            let s = segundos < 10 ? "0" + segundos : segundos;
+
+            return h + ":" + m + ":" + s;
+
+        }
+
+        // Inicia el reloj desde 0
+        function iniciarCronometro() {
+            clearInterval(intervaloTiempo); // Limpia cualquier reloj previo por seguridad
+            tiempoSegundos = 0;
+            document.getElementById("cronometro").innerText = "Tiempo: 00:00:00";
+
+            intervaloTiempo = setInterval(function() {
+                tiempoSegundos++;
+                document.getElementById("cronometro").innerText = "Tiempo: " + formatearTiempo(tiempoSegundos);
+            }, 1000);
+        }
+
+        // Detiene el reloj
+        function detenerCronometro() {
+            clearInterval(intervaloTiempo);
+        }
+        
         const musica = document.getElementById("musicaFondo");
 
         // Al hacer el primer clic en cualquier parte de la página, arranca el audio de fondo
@@ -147,56 +246,60 @@
             }
         }
 
-
         let caja = document.getElementById("caja");
         let pajQuit = document.getElementById("pajQuit");
 
         let contador = 0
 
+        function cargarJuego(){
+            iniciarCronometro();
+            let numAzar = Math.floor((Math.random() * (5000 - 1)) + 1);
 
-        let numAzar = Math.floor((Math.random() * (5000 - 1)) + 1);
+            // Ancho y alto del palo
+            const paloAncho = 10;
+            const paloAlto = 60;
 
-        // Ancho y alto del palo
-        const paloAncho = 10;
-        const paloAlto = 60;
+            // Límite máximo donde se puede colocar la esquina superior izquierda
+            const maxLeft = caja.clientWidth - paloAncho;
+            const maxTop = caja.clientHeight - paloAlto;
 
-        // Límite máximo donde se puede colocar la esquina superior izquierda
-        const maxLeft = caja.clientWidth - paloAncho;
-        const maxTop = caja.clientHeight - paloAlto;
+            for (let i = 1; i <= 5000; i++) {
 
-        for (let i = 1; i <= 5000; i++) {
+                let div = document.createElement("div");
 
-            let div = document.createElement("div");
+                if(i == numAzar){
+                    div.setAttribute("id", "true");
+                }
+                else{
+                    div.setAttribute("id", "false");
+                }
 
-            if(i == numAzar){
-                div.setAttribute("id", "true");
+                // 1. Generar ángulo aleatorio de 0 a 360 grados
+                let angulo = Math.floor(Math.random() * 360);
+
+                // 2. Aplicar la posición usando las variables maxLeft y maxTop de la caja
+                div.style.left = Math.floor(Math.random() * maxLeft) + "px";
+                div.style.top = Math.floor(Math.random() * maxTop) + "px";
+
+                // 3. Aplicar la inclinación
+                div.style.transform = "rotate(" + angulo + "deg)";
+
+                caja.appendChild(div);
+
             }
-            else{
-                div.setAttribute("id", "false");
+
+            let paja = document.querySelectorAll("#false")
+            let aguja = document.querySelector("#true")
+
+            for (let i = 0; i < paja.length; i++) {
+                paja[i].addEventListener("click", tocaPaja)  
             }
 
-            // 1. Generar ángulo aleatorio de 0 a 360 grados
-            let angulo = Math.floor(Math.random() * 360);
+            aguja.addEventListener("click", tocaAguja)  
 
-            // 2. Aplicar la posición usando las variables maxLeft y maxTop de la caja
-            div.style.left = Math.floor(Math.random() * maxLeft) + "px";
-            div.style.top = Math.floor(Math.random() * maxTop) + "px";
-
-            // 3. Aplicar la inclinación
-            div.style.transform = "rotate(" + angulo + "deg)";
-
-            caja.appendChild(div);
-            
         }
 
-        let paja = document.querySelectorAll("#false")
-        let aguja = document.querySelector("#true")
-
-        for (let i = 0; i < paja.length; i++) {
-            paja[i].addEventListener("click", tocaPaja)  
-        }
-
-        aguja.addEventListener("click", tocaAguja)  
+        cargarJuego()
 
         function tocaPaja(event) {
 
@@ -219,17 +322,21 @@
                 nodoClick = event.target
                 caja.removeChild(nodoClick)
                 sonidoGanarReproducir()
-
+                detenerCronometro();
                 document.getElementById("textoContador").innerText = "Has quitado " + contador + " pajas.";
+                document.getElementById("textoTiempo").innerText = "Tiempo total: " + formatearTiempo(tiempoSegundos);
                 document.getElementById("modalVictoria").style.display = "flex";
 
                 caja.replaceChildren();
             }
         }
 
-    function cerrarModal() {
-        console.log("lol")
-    }
+        function cerrarModal() {
+            contador = 0
+            pajQuit.textContent = "Paja quitada: " + contador
+            document.getElementById("modalVictoria").style.display = "none";
+            cargarJuego()
+        }
 
     </script>
 
