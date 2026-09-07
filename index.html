@@ -182,6 +182,7 @@ body {
         
         let tiempoSegundos = 0;
         let intervaloTiempo = null;
+        let sonidoYaSonado = [];
 
         function formatearTiempo(segundosTotales) {
 
@@ -235,17 +236,35 @@ body {
 
         const sonido = document.getElementById("sonido");
 
-        function sonidoAlAzar(){
+        let bolsaAudios = [];
 
-            let azar = Math.floor((Math.random() * (51 - 1)) + 1);
+        function obtenerNumeroSinRepetir() {
 
-            sonido.setAttribute("src", `./audio/s${azar}.mp3`)
+            if (bolsaAudios.length === 0) {
+
+                bolsaAudios = Array.from({ length: 50 }, (_, i) => i + 1);
+
+
+                for (let i = bolsaAudios.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [bolsaAudios[i], bolsaAudios[j]] = [bolsaAudios[j], bolsaAudios[i]];
+                }
+            }
+            return bolsaAudios.pop(); 
+        }
+
+        function sonidoAlAzar() {
+            const azar = obtenerNumeroSinRepetir();
+        
+            const sonido = document.getElementById("sonido");
+            sonido.setAttribute("src", `./audio/s${azar}.mp3`);
+
             if (sonido.paused) {
-                sonido.volume = 1.0; // Ajusta el volumen aquí (de 0.0 a 1.0)
+                sonido.volume = 1.0;
                 sonido.play();
             }
         }
-
+        
         let caja = document.getElementById("caja");
         let pajQuit = document.getElementById("pajQuit");
 
